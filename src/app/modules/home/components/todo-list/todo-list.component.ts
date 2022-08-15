@@ -8,15 +8,14 @@ import { Component, DoCheck, OnInit } from '@angular/core';
 })
 export class TodoListComponent implements OnInit, DoCheck {
 
-  public taskList: Array<TaskList> = [];
+  public taskList: Array<TaskList> = JSON.parse(localStorage.getItem("list") || '[]');
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {  }
 
   ngDoCheck(): void {
-    this.taskList.sort((first, last) => Number(first.checked) - Number(last.checked))
+    this.setLocalStorage()
   }
 
   public deleteItemTaskList(event: number) {
@@ -43,6 +42,13 @@ export class TodoListComponent implements OnInit, DoCheck {
       if (confirm) {
         this.deleteItemTaskList(index);
       }
+    }
+  }
+
+  public setLocalStorage() {
+    if (this.taskList) {
+      this.taskList.sort((first, last) => Number(first.checked) - Number(last.checked))
+      localStorage.setItem("list", JSON.stringify(this.taskList));
     }
   }
 
